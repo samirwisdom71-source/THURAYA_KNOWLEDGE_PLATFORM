@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+<title>Thuraya</title><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#123F3A"/><stop offset="1" stop-color="#3A8E86"/></linearGradient></defs>
+<rect width="128" height="128" rx="34" fill="url(#g)"/><path d="M36 37h56v14H71v43H57V51H36z" fill="#fff"/><circle cx="92" cy="37" r="8" fill="#C8A76A"/>
+</svg>

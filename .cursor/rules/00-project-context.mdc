@@ -1,0 +1,8 @@
+---
+description: Core product context for Thuraya public personal website
+alwaysApply: true
+---
+This is a public personal knowledge platform for Thuraya Al Shamsi.
+It is NOT an employer website, NOT an award microsite, and NOT a corporate KPI portfolio.
+Use Arabic as source of truth, RTL first.
+Treat 02_DESIGN_BASELINE as visual reference only, not production code.

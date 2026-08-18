@@ -1,0 +1,7 @@
+---
+description: Testing and production release requirements
+alwaysApply: true
+---
+Before production release run validation and preproduction guard scripts.
+Release fails if demo data, forbidden internal fields in public seed, duplicate slugs, or missing required public-safe states are found.
+Test mobile/tablet/desktop and Arabic/English.

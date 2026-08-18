@@ -1,0 +1,9 @@
+---
+description: Content integrity, dates and audience metrics
+alwaysApply: true
+---
+Never backdate content.
+Seeded launch content may use show_publish_date=false.
+Never show fictional visitor, subscriber, download, challenge or impact metrics in production.
+All production counters are actual and start from zero.
+Demo data exists only in 07_STAGING_ONLY and must never be deployed.

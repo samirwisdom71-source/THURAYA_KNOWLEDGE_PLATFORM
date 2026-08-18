@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.env
+.env.local
+*.log
+storage/private/*
+storage/public/*
+!storage/.keep
+.DS_Store
+
+backups
+07_STAGING_ONLY/
+source_package_v1.0/

@@ -1,0 +1,8 @@
+---
+description: CMS publishing and translation workflow
+alwaysApply: true
+---
+Arabic is source-of-truth.
+On publish: generate English translation, cache it, then allow manual override.
+Drafts are noindex.
+New Ask Thuraya submissions and challenge responses require moderation; never auto-publish user submissions.

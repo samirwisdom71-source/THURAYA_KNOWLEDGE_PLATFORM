@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: thuraya
+      POSTGRES_USER: thuraya
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-local-db-password}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U thuraya -d thuraya"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - thuraya_db:/var/lib/postgresql/data
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://thuraya:${POSTGRES_PASSWORD:-change-local-db-password}@db:5432/thuraya
+      STORAGE_DIR: /app/storage
+      NODE_ENV: production
+      APP_ENV: ${APP_ENV:-production}
+      SITE_URL: ${SITE_URL:-https://thuraya-alshamsi.gate-digital.com}
+    command: ["node", "scripts/boot-runtime.mjs"]
+    ports:
+      - "3000:3000"
+    volumes:
+      - thuraya_storage:/app/storage
+
+volumes:
+  thuraya_db:
+  thuraya_storage:

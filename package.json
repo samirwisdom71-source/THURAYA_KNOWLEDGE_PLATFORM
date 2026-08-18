@@ -1,0 +1,43 @@
+{
+  "name": "thuraya-knowledge-platform",
+  "version": "1.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "npm run content:validate && next build",
+    "start": "next start --hostname 127.0.0.1 --port 3000",
+    "start:prod": "node scripts/boot-runtime.mjs",
+    "db:prepare": "node scripts/db-migrate.mjs",
+    "typecheck": "tsc --noEmit",
+    "content:normalize": "python scripts/normalize_seed.py",
+    "content:validate": "python scripts/validate_content.py",
+    "db:migrate": "node scripts/db-migrate.mjs",
+    "db:seed": "node scripts/db-seed.mjs",
+    "db:admin": "node scripts/create-admin.mjs",
+    "setup": "npm run content:normalize && npm run content:validate && npm run db:migrate && npm run db:seed && npm run db:admin",
+    "security:audit": "python scripts/security_audit.py",
+    "preflight": "node scripts/preflight.mjs",
+    "project:audit": "python scripts/project_audit.py",
+    "backup": "sh scripts/backup.sh"
+  },
+  "dependencies": {
+    "next": "16.3.1",
+    "pg": "^8.13.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "sharp": "0.35.3"
+  },
+  "overrides": {
+    "sharp": "0.35.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.11.11",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.8.3"
+  }
+}

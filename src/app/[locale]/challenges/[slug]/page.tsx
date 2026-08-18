@@ -1,0 +1,2 @@
+import { notFound } from 'next/navigation'; import { isLocale } from '@/lib/locale'; import { getChallengeActualCount, getPublicBySlug } from '@/lib/content'; import { ContentDetailView } from '@/components/ContentDetailView';
+export default async function Page({params}:{params:Promise<{locale:string;slug:string}>}){const{locale,slug}=await params;if(!isLocale(locale))notFound();const item=await getPublicBySlug('challenge',slug);if(!item)notFound();return <ContentDetailView item={item} locale={locale} challengeCount={await getChallengeActualCount(slug)}/>}

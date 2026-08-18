@@ -1,0 +1,9 @@
+---
+description: Design system and RTL/LTR behavior
+alwaysApply: true
+---
+Arabic-first premium personal-brand design.
+RTL must affect layout, nav, breadcrumbs, arrows, forms, modals and grids.
+English switches to LTR.
+Use large authentic photography, editorial layouts, bento cards, restrained glass effects and subtle motion.
+Avoid corporate dashboard styling and KPI-heavy homepage.

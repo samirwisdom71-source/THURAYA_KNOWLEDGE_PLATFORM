@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.env*
+source_package_v1.0
+storage/private
+storage/public
+content/source/package_01_seed_ar.json
+
+backups

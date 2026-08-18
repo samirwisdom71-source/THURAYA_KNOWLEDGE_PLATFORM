@@ -1,0 +1,7 @@
+---
+description: Privacy and public-safe publishing requirements
+alwaysApply: true
+---
+Never expose employer KPIs, financial savings, contracts, internal correspondence, employee data, internal system screenshots, confidential documents, or private identifiers.
+Strip internal fields including award_alignment_internal, is_demo and admin_notes from public API.
+Visual assets need public-safe review and consent where identifiable people appear.
