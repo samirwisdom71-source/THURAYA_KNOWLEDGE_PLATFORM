@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   output: 'standalone',
   serverExternalPackages: ['sharp'],
+  // Next standalone tracing copies sharp-win32-x64.node but not sibling libvips DLLs.
+  outputFileTracingIncludes: {
+    '/*': ['./node_modules/@img/sharp-win32-x64/lib/**'],
+  },
   images: { formats: ['image/avif', 'image/webp'], minimumCacheTTL: 14400 },
   async headers() {
     return [{source:'/:path*',headers:[

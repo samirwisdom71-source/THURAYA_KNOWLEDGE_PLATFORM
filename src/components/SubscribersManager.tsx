@@ -1,14 +1,27 @@
 'use client';
 
 import { useState } from 'react';
+import { IconButton } from '@/components/AdminIcon';
+import { AdminCopyHead, useAdminLocale } from '@/components/AdminShell';
+import { adminCopy, dateLocale } from '@/lib/admin-i18n';
 
 type Subscriber = { id: string; email: string; locale: string; status: 'active' | 'unsubscribed' | 'bounced'; consent: boolean; created_at: string };
 
-const statusAr: Record<Subscriber['status'], string> = { active: 'نشط', unsubscribed: 'ألغى الاشتراك', bounced: 'مرتد' };
+export function SubscribersPageHead() {
+  const locale = useAdminLocale();
+  return <AdminCopyHead page="subscribers" actions={<IconButton name="export" label={adminCopy[locale].exportCsv} href="/api/admin/subscribers/export" />} />;
+}
 
 export function SubscribersManager({ initial }: { initial: Subscriber[] }) {
+  const locale = useAdminLocale();
+  const t = adminCopy[locale];
   const [items, setItems] = useState(initial);
   const [msg, setMsg] = useState('');
+  const statusLabels: Record<Subscriber['status'], string> = {
+    active: t.active,
+    unsubscribed: t.unsubscribed,
+    bounced: t.bounced,
+  };
 
   async function save(id: string, status: Subscriber['status']) {
     const response = await fetch(`/api/admin/subscribers/${id}`, {
@@ -19,8 +32,8 @@ export function SubscribersManager({ initial }: { initial: Subscriber[] }) {
     const payload = await response.json().catch(() => ({}));
     if (response.ok) {
       setItems((prev) => prev.map((item) => (item.id === id ? { ...item, status } : item)));
-      setMsg('تم حفظ حالة المشترك.');
-    } else setMsg(payload.error || 'تعذر الحفظ');
+      setMsg(t.savedSubscriber);
+    } else setMsg(payload.error || t.saveFailed);
   }
 
   return (
@@ -30,11 +43,11 @@ export function SubscribersManager({ initial }: { initial: Subscriber[] }) {
         <table className="adminTable">
           <thead>
             <tr>
-              <th>البريد</th>
-              <th>اللغة</th>
-              <th>الحالة</th>
-              <th>الموافقة</th>
-              <th>التاريخ</th>
+              <th>{t.email}</th>
+              <th>{t.language}</th>
+              <th>{t.status}</th>
+              <th>{t.consent}</th>
+              <th>{t.date}</th>
             </tr>
           </thead>
           <tbody>
@@ -44,17 +57,17 @@ export function SubscribersManager({ initial }: { initial: Subscriber[] }) {
                 <td>{item.locale}</td>
                 <td>
                   <select className="adminSelect" value={item.status} onChange={(event) => save(item.id, event.target.value as Subscriber['status'])}>
-                    {Object.entries(statusAr).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                    {Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
                   </select>
                 </td>
-                <td>{item.consent ? 'نعم' : 'لا'}</td>
-                <td>{new Date(item.created_at).toLocaleString('ar-AE')}</td>
+                <td>{item.consent ? t.yes : t.no}</td>
+                <td>{new Date(item.created_at).toLocaleString(dateLocale(locale))}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {!items.length && <div className="emptyState">لا مشتركين بعد. العداد يبدأ من الصفر.</div>}
+      {!items.length && <div className="emptyState">{t.noSubscribers}</div>}
     </>
   );
 }

@@ -9,7 +9,7 @@ export const metadata = { robots: { index: false, follow: false } };
 
 type CountRow = { key: string; n: string };
 type MonthRow = { month: string; n: string };
-type RecentRow = { id: string; content_type: ContentType; slug: string; status: string; title: string | null; updated_at: string };
+type RecentRow = { id: string; content_type: ContentType; slug: string; status: string; title: string | null; title_en: string | null; updated_at: string };
 
 export default async function Page() {
   const user = await requireAdminPage();
@@ -30,7 +30,7 @@ export default async function Page() {
     query<CountRow>(`SELECT visibility AS key, count(*)::text AS n FROM content_items GROUP BY visibility ORDER BY n DESC`),
     query<CountRow>(`SELECT COALESCE(translation_status,'unset') AS key, count(*)::text AS n FROM content_items GROUP BY 1 ORDER BY n DESC`),
     query<CountRow>(`SELECT CASE WHEN public_safe_review THEN 'reviewed' ELSE 'pending_review' END AS key, count(*)::text AS n FROM media_assets GROUP BY 1 ORDER BY n DESC`),
-    query<RecentRow>(`SELECT id, content_type, slug, status, COALESCE(data_ar->>'title', data_ar->>'question', slug) AS title, updated_at FROM content_items ORDER BY updated_at DESC LIMIT 8`),
+    query<RecentRow>(`SELECT id, content_type, slug, status, COALESCE(data_ar->>'title', data_ar->>'question', slug) AS title, COALESCE(NULLIF(data_en->>'title',''), NULLIF(data_en->>'question','')) AS title_en, updated_at FROM content_items ORDER BY updated_at DESC LIMIT 8`),
   ]);
 
   const row = totals.rows[0];
@@ -52,7 +52,7 @@ export default async function Page() {
         visibility={visibility.rows.map((item) => ({ key: item.key, n: Number(item.n) }))}
         translation={translation.rows.map((item) => ({ key: item.key, n: Number(item.n) }))}
         mediaReview={mediaReview.rows.map((item) => ({ key: item.key, n: Number(item.n) }))}
-        recent={recent.rows.map((item) => ({ ...item, title: item.title || item.slug }))}
+        recent={recent.rows.map((item) => ({ ...item, title: item.title || item.slug, titleEn: item.title_en || undefined }))}
       />
     </AdminShell>
   );

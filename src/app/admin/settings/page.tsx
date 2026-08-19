@@ -1,5 +1,4 @@
-import { AdminPageHead } from '@/components/AdminIcon';
-import { AdminShell } from '@/components/AdminShell';
+import { AdminCopyHead, AdminShell } from '@/components/AdminShell';
 import { SettingsManager } from '@/components/SettingsManager';
 import { requireAdminPage } from '@/lib/admin-page';
 import { query } from '@/lib/db';
@@ -14,7 +13,7 @@ export default async function Page() {
   const initial = Object.fromEntries(settings.rows.map((row) => [row.setting_key, row.value_json]));
   return (
     <AdminShell user={user}>
-      <AdminPageHead title="الإعدادات" subtitle="هوية الموقع والنصوص العامة وصور الـ Hero." />
+      <AdminCopyHead page="settings" />
       <SettingsManager initial={initial} media={media.rows} />
     </AdminShell>
   );

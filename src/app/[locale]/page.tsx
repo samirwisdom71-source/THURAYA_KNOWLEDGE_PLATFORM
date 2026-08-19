@@ -6,7 +6,7 @@ import { MediaVisual } from '@/components/MediaVisual';
 import { NewsletterForm } from '@/components/NewsletterForm';
 import { Reveal } from '@/components/Reveal';
 import { SectionHeading } from '@/components/SectionHeading';
-import { getFeatured, getPublicContent, getSetting, localizedData, titleOf } from '@/lib/content';
+import { excerptOf, getFeatured, getPublicContent, getSetting, localizedData, titleOf } from '@/lib/content';
 import { isLocale } from '@/lib/locale';
 
 type HomeFeatured = {
@@ -60,13 +60,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  const [heroAsset, featured, heroAr, heroEn, leadAr, leadEn] = await Promise.all([
+  const [heroAsset, featured, heroAr, heroEn] = await Promise.all([
     getSetting<string | null>('hero_asset_id', null),
     getSetting<HomeFeatured>('home_featured', defaults),
     getSetting('hero_title_ar', 'أشارك المعرفة لأصنع أثرًا يتجاوز حدود العمل'),
     getSetting('hero_title_en', 'I share knowledge to create impact beyond work'),
-    getSetting('hero_lead_ar', 'الاستدامة • ابتكار مسؤول • جودة حياة • معرفة'),
-    getSetting('hero_lead_en', 'Sustainability • Responsible innovation • Quality of life • Knowledge'),
   ]);
 
   const cfg = {
@@ -108,7 +106,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               <span>{locale === 'ar' ? 'منصة شخصية للمعرفة والأثر المجتمعي' : 'A personal platform for knowledge and community impact'}</span>
             </div>
             <h1>{String(locale === 'ar' ? heroAr : heroEn)}</h1>
-            <p className="heroLead">{String(locale === 'ar' ? leadAr : leadEn)}</p>
             <ul className="homePillars" aria-label={locale === 'ar' ? 'محاور المنصة' : 'Platform themes'}>
               {(locale === 'ar'
                 ? ['الاستدامة', 'ابتكار مسؤول', 'جودة حياة', 'معرفة']
@@ -231,7 +228,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 <div className="featurePanel feature homeMinute">
                   <span className="kicker">{locale === 'ar' ? 'دقيقة معرفة' : 'KNOWLEDGE MINUTE'}</span>
                   <h3>{titleOf(minute, locale)}</h3>
-                  <p>{String(localizedData(minute, locale).body_markdown || '').slice(0, 280)}</p>
+                  <p>{excerptOf(minute, locale, 280)}</p>
                   <Link className="btn gold" href={`/${locale}/content/${minute.content_type}/${minute.slug}`}>
                     {locale === 'ar' ? 'اقرأها' : 'Read it'}
                   </Link>

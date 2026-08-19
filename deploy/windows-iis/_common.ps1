@@ -8,7 +8,7 @@ function Get-ThurayaRoot {
   param([string]$Override)
   if ($Override) { return $Override }
   if ($env:THURAYA_ROOT) { return $env:THURAYA_ROOT }
-  return 'D:\Thuraya'
+  return 'C:\Thuraya'
 }
 
 function Get-ThurayaPaths {

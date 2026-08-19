@@ -66,6 +66,16 @@ foreach ($extra in @('db', 'scripts', 'content\generated')) {
   }
 }
 
+# Next standalone tracing often omits libvips DLLs next to sharp-win32-x64.node.
+$sharpLibFrom = Join-Path $releaseDir 'node_modules\@img\sharp-win32-x64\lib'
+$sharpLibTo = Join-Path $runDir 'node_modules\@img\sharp-win32-x64\lib'
+if (Test-Path $sharpLibFrom) {
+  New-Item -ItemType Directory -Force -Path $sharpLibTo | Out-Null
+  Copy-Item (Join-Path $sharpLibFrom '*') $sharpLibTo -Force
+} else {
+  Write-Warning "sharp Windows native lib folder not found: $sharpLibFrom"
+}
+
 Copy-Item (Join-Path $here 'web.config') (Join-Path $paths.Iis 'web.config') -Force
 $ops = Join-Path $paths.App 'windows-iis'
 New-Item -ItemType Directory -Force -Path $ops | Out-Null

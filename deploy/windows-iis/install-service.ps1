@@ -15,8 +15,11 @@ $winswDir = Join-Path $paths.App 'winsw'
 New-Item -ItemType Directory -Force -Path $winswDir | Out-Null
 $winswExe = Join-Path $winswDir 'ThurayaKnowledge.exe'
 $winswXml = Join-Path $winswDir 'ThurayaKnowledge.xml'
-$startScript = (Resolve-Path (Join-Path $here 'start-production.ps1')).Path
-
+$scriptsDir = Join-Path $paths.App 'scripts'
+New-Item -ItemType Directory -Force -Path $scriptsDir | Out-Null
+Copy-Item -Path (Join-Path $here '*.ps1') -Destination $scriptsDir -Force
+Copy-Item -Path (Join-Path $here '.env.production.example') -Destination $scriptsDir -Force
+$startScript = Join-Path $scriptsDir 'start-production.ps1'
 if (-not (Test-Path $winswExe)) {
   $url = 'https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe'
   Write-Host "Downloading WinSW from $url"
@@ -44,16 +47,20 @@ $xml = @"
 "@
 Set-Content -LiteralPath $winswXml -Value $xml -Encoding UTF8
 
+icacls $scriptsDir /grant "${ServiceAccount}:(OI)(CI)RX" | Out-Null
+icacls $paths.Releases /grant "${ServiceAccount}:(OI)(CI)RX" | Out-Null
 icacls $paths.Storage /grant "${ServiceAccount}:(OI)(CI)M" | Out-Null
 icacls $paths.Logs /grant "${ServiceAccount}:(OI)(CI)M" | Out-Null
 icacls $paths.EnvFile /grant "${ServiceAccount}:R" | Out-Null
 
 $existing = Get-ServiceState $paths.ServiceId
 if ($existing) {
-  & $winswExe refresh
-} else {
-  & $winswExe install
+  & $winswExe stopwait
+  Start-Sleep -Seconds 1
+  & $winswExe uninstall
+  Start-Sleep -Seconds 2
 }
+& $winswExe install
 
 $svc = Get-WmiObject Win32_Service -Filter "Name='$($paths.ServiceId)'"
 if ($svc) {

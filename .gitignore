@@ -11,3 +11,5 @@ storage/public/*
 backups
 07_STAGING_ONLY/
 source_package_v1.0/
+
+*.bak-*

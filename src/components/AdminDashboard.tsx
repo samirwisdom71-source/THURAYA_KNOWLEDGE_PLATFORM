@@ -8,7 +8,7 @@ import { useAdminLocale } from './AdminShell';
 
 export type NamedCount = { key: string; n: number };
 export type MonthCount = { month: string; n: number };
-export type RecentItem = { id: string; content_type: ContentType; slug: string; status: string; title: string; updated_at: string };
+export type RecentItem = { id: string; content_type: ContentType; slug: string; status: string; title: string; titleEn?: string; updated_at: string };
 
 const statusLabel: Record<string, { ar: string; en: string }> = {
   published: { ar: 'منشور', en: 'Published' },
@@ -383,7 +383,7 @@ export function AdminDashboard({
           {recent.map((item) => (
             <Link key={item.id} href={`/admin/content/${item.id}`} className="dashRecentItem">
               <span className={`status ${item.status}`}>{labelOf(item.status, locale)}</span>
-              <b>{item.title || item.slug}</b>
+              <b>{(locale === 'en' && item.titleEn) || item.title || item.slug}</b>
               <small>{contentTypeLabels[item.content_type][locale]} · {new Date(item.updated_at).toLocaleDateString(locale === 'ar' ? 'ar-AE' : 'en-GB')}</small>
             </Link>
           ))}

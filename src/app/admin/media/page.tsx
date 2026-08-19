@@ -1,5 +1,4 @@
-import { AdminPageHead } from '@/components/AdminIcon';
-import { AdminShell } from '@/components/AdminShell';
+import { AdminCopyHead, AdminShell } from '@/components/AdminShell';
 import { MediaManager } from '@/components/MediaManager';
 import { requireAdminPage } from '@/lib/admin-page';
 import { query } from '@/lib/db';
@@ -10,7 +9,7 @@ export default async function Page() {
   const result = await query<MediaAsset>('SELECT * FROM media_assets ORDER BY created_at DESC LIMIT 300');
   return (
     <AdminShell user={user}>
-      <AdminPageHead title="الصور والملفات" subtitle="الأصل يبقى خاصًا حتى تُراجع الصورة وتُجعل عامة." />
+      <AdminCopyHead page="media" />
       <MediaManager initial={result.rows} />
     </AdminShell>
   );

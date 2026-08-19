@@ -5,7 +5,7 @@ IIS يعمل Reverse Proxy فقط. Next.js يعمل كعملية Node.js مست�
 
 لا تنشر إلى الإنترنت قبل:
 
-1. ملء `D:\Thuraya\.env` من `.env.production.example`
+1. ملء `C:\Thuraya\.env` من `.env.production.example`
 2. إنشاء قاعدة بيانات Production بمستخدم تطبيق غير `postgres`
 3. تثبيت شهادة HTTPS
 4. إغلاق المنفذ 3000 على الجدار الناري
@@ -13,7 +13,7 @@ IIS يعمل Reverse Proxy فقط. Next.js يعمل كعملية Node.js مست�
 ## هيكل المجلدات
 
 ```
-D:\Thuraya\
+C:\Thuraya\
   app\                 أدوات الخدمة وweb.config الخاص بـ IIS
     iis\web.config
     winsw\
@@ -27,7 +27,7 @@ D:\Thuraya\
   .env                 أسرار Production. خارج كل Release
 ```
 
-`STORAGE_DIR=D:\Thuraya\storage` يجب أن يبقى خارج `releases\` و`current\`.
+`STORAGE_DIR=C:\Thuraya\storage` يجب أن يبقى خارج `releases\` و`current\`.
 
 ## متطلبات السيرفر
 
@@ -38,7 +38,7 @@ D:\Thuraya\
 - وحدات IIS:
   - URL Rewrite
   - Application Request Routing (ARR)
-- موقع IIS يشير إلى `D:\Thuraya\app\iis` فقط، وليس إلى سورس Next.js
+- موقع IIS يشير إلى `C:\Thuraya\app\iis` فقط، وليس إلى سورس Next.js
 
 ## PostgreSQL Production
 
@@ -63,15 +63,15 @@ ALTER SCHEMA public OWNER TO thuraya_app;
 المستخدم `thuraya_app` يملك القاعدة لتشغيل migrations عند كل تحديث.
 لا تستخدم حساب `postgres` superuser في `DATABASE_URL`.
 
-`DATABASE_URL` يبقى فقط داخل `D:\Thuraya\.env`.
+`DATABASE_URL` يبقى فقط داخل `C:\Thuraya\.env`.
 
 بعد أول نشر:
 
 ```powershell
-cd D:\Thuraya\current
+cd C:\Thuraya\current
 # أو من مجلد المصدر قبل التبديل
 $env:Path = "C:\Program Files\PostgreSQL\17\bin;" + $env:Path
-# حمّل المتغيرات من D:\Thuraya\.env ثم:
+# حمّل المتغيرات من C:\Thuraya\.env ثم:
 node scripts\db-migrate.mjs
 node scripts\db-seed.mjs
 node scripts\create-admin.mjs
@@ -81,14 +81,14 @@ node scripts\create-admin.mjs
 
 ## متغيرات البيئة المطلوبة
 
-انسخ `.env.production.example` إلى `D:\Thuraya\.env` وعبّئ القيم الحقيقية هناك.
+انسخ `.env.production.example` إلى `C:\Thuraya\.env` وعبّئ القيم الحقيقية هناك.
 
 الأساسي:
 
 - `APP_ENV=production`
 - `SITE_URL=https://DOMAIN`
 - `DATABASE_URL=...`
-- `STORAGE_DIR=D:\Thuraya\storage`
+- `STORAGE_DIR=C:\Thuraya\storage`
 - `CAPTCHA_MODE=required`
 - `TURNSTILE_SITE_KEY`
 - `TURNSTILE_SECRET_KEY`
@@ -124,11 +124,11 @@ node scripts\create-admin.mjs
 
 4. أنشئ موقعًا في IIS:
 
-- Physical path: `D:\Thuraya\app\iis`
+- Physical path: `C:\Thuraya\app\iis`
 - Binding: `https://thuraya-alshamsi.gate-digital.com` بالشهادة
 - Binding اختياري لـ HTTP على المنفذ 80 لتحويله إلى HTTPS
 
-5. انسخ `web.config` إلى `D:\Thuraya\app\iis\web.config` (`deploy-update.ps1` يفعل ذلك).
+5. انسخ `web.config` إلى `C:\Thuraya\app\iis\web.config` (`deploy-update.ps1` يفعل ذلك).
 
 6. حجم الرفع مضبوط على 30 MB في `web.config` (`maxAllowedContentLength=31457280`) لأن التطبيق يرفض ما فوق 25 MB. يمكن تغيير الرقم دون تعديل كود الموقع.
 
@@ -136,7 +136,7 @@ node scripts\create-admin.mjs
 
 8. WebSocket معطّل في `web.config` لأن المشروع لا يحتاجه.
 
-9. سجّل IIS و`D:\Thuraya\logs` لمراقبة 5xx.
+9. سجّل IIS و`C:\Thuraya\logs` لمراقبة 5xx.
 
 ### HTTPS checklist
 
@@ -187,7 +187,7 @@ cd <repo>\deploy\windows-iis
 .\backup.ps1
 ```
 
-ينتج مجلدًا في `D:\Thuraya\backups\thuraya-<timestamp>` يحتوي:
+ينتج مجلدًا في `C:\Thuraya\backups\thuraya-<timestamp>` يحتوي:
 
 - `database.dump`
 - `storage.zip`
@@ -203,7 +203,7 @@ cd <repo>\deploy\windows-iis
 عملية حساسة ولا تعمل بصمت:
 
 ```powershell
-.\restore.ps1 -RestoreFrom D:\Thuraya\backups\thuraya-YYYYMMDDTHHMMSSZ -ConfirmRestore
+.\restore.ps1 -RestoreFrom C:\Thuraya\backups\thuraya-YYYYMMDDTHHMMSSZ -ConfirmRestore
 ```
 
 ثم اكتب `YES`. بعدها أعد تشغيل الخدمة وافحص `/api/health`.
@@ -223,7 +223,7 @@ git remote add origin https://github.com/ORG/thuraya-knowledge-platform.git
 git push -u origin main
 ```
 
-لا ترفع `.env` ولا `storage` ولا `07_STAGING_ONLY`. أسرار الإنتاج تبقى في `D:\Thuraya\.env` على السيرفر فقط.
+لا ترفع `.env` ولا `storage` ولا `07_STAGING_ONLY`. أسرار الإنتاج تبقى في `C:\Thuraya\.env` على السيرفر فقط.
 
 على السيرفر ثبّت Git، ثم من PowerShell كمسؤول:
 
@@ -266,8 +266,8 @@ cd D:\src\thuraya\deploy\windows-iis
 
 ```powershell
 .\stop-production.ps1
-Remove-Item D:\Thuraya\current -Force
-New-Item -ItemType Junction -Path D:\Thuraya\current -Target 'D:\Thuraya\releases\<previous>\run'
+Remove-Item C:\Thuraya\current -Force
+New-Item -ItemType Junction -Path C:\Thuraya\current -Target 'C:\Thuraya\releases\<previous>\run'
 .\start-production.ps1
 .\health-check.ps1
 ```

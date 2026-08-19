@@ -8,7 +8,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $paths = Get-ThurayaPaths $ThurayaRoot
 
 Write-Host 'RESTORE IS DESTRUCTIVE.'
-Write-Host 'It overwrites the PostgreSQL database and D:\Thuraya\storage.'
+Write-Host 'It overwrites the PostgreSQL database and C:\Thuraya\storage.'
 Write-Host 'It does not run unless you pass -ConfirmRestore and type YES below.'
 
 if (-not $ConfirmRestore) { throw 'Refusing to restore: add -ConfirmRestore' }
