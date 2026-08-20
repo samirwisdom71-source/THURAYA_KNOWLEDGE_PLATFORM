@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(base),
   title: 'ثريا الشامسي | معرفة • استدامة • أثر مجتمعي',
   description: 'منصة ثريا الشامسي الشخصية للمعرفة والاستدامة والابتكار المسؤول وجودة الحياة والأثر المجتمعي.',
-  icons: { icon: '/brand/thuraya-mark.svg' },
-  openGraph: { images: ['/brand/og-default.svg'] },
+  icons: { icon: '/brand/logo-thuraya.jpeg' },
+  openGraph: { images: ['/brand/logo-thuraya.jpeg'] },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

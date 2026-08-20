@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import type { Locale } from '@/lib/types';
+import { BRAND_LOGO } from '@/lib/brand';
 import { ui } from '@/lib/locale';
 
 export function Nav({locale,siteName,tagline,signedIn=false}:{locale:Locale;siteName:string;tagline?:string;signedIn?:boolean}) {
@@ -12,7 +13,7 @@ export function Nav({locale,siteName,tagline,signedIn=false}:{locale:Locale;site
   const items = [['knowledge',t.knowledge],['topics',t.topics],['challenges',t.challenges],['tools',t.tools],['library',t.library],['newsletter',t.newsletter],['ask-thuraya',t.ask]];
   const homeHref=`/${locale}`;
   return <header className="siteHeader"><div className="container navBar">
-    <Link href={homeHref} className={`brand${pathname===homeHref?' is-active':''}`}><img src="/brand/thuraya-mark.svg" alt=""/><span><b>{siteName}</b><small>{tagline|| (locale==='ar'?'معرفة • استدامة • أثر':'Knowledge • Sustainability • Impact')}</small></span></Link>
+    <Link href={homeHref} className={`brand${pathname===homeHref?' is-active':''}`}><img className="brandLogo" src={BRAND_LOGO} alt={siteName}/><span><b>{siteName}</b><small>{tagline|| (locale==='ar'?'معرفة • استدامة • أثر':'Knowledge • Sustainability • Impact')}</small></span></Link>
     <nav className={open?'navLinks open':'navLinks'} aria-label={locale==='ar'?'التنقل الرئيسي':'Main navigation'}>
       {items.map(([path,label])=>{
         const href=`/${locale}/${path}`;

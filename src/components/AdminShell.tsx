@@ -6,6 +6,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { AdminIcon, AdminPageHead } from '@/components/AdminIcon';
 import { ADMIN_LOCALE_COOKIE, adminCopy } from '@/lib/admin-i18n';
 import type { AdminUser } from '@/lib/auth';
+import { BRAND_LOGO } from '@/lib/brand';
 import type { Locale } from '@/lib/types';
 
 type AdminLocaleContextValue = { locale: Locale; setLocale: (next: Locale) => void };
@@ -122,14 +123,13 @@ export function AdminShell({ user, children }: { user: AdminUser; children: Reac
   const pathname = usePathname() || '/admin';
   const { locale, setLocale } = useContext(AdminLocaleContext);
 
-  const initial = (user.name || user.email || 'T').trim().charAt(0).toUpperCase();
   const role = user.role === 'admin' ? (locale === 'ar' ? 'مديرة المحتوى' : 'Admin') : (locale === 'ar' ? 'محررة' : 'Editor');
 
   return (
     <div className="adminApp" dir={locale === 'ar' ? 'rtl' : 'ltr'} lang={locale}>
       <header className="adminHeader">
         <Link href="/admin" className="adminHeaderBrand">
-          <img src="/brand/thuraya-mark.svg" alt="" />
+          <img className="brandLogo" src={BRAND_LOGO} alt={locale === 'ar' ? 'ثريا الشامسي' : 'Thuraya Al Shamsi'} />
           <span>
             <b>{locale === 'ar' ? 'إدارة ثريا' : 'Thuraya CMS'}</b>
             <small>{pageTitle(pathname, locale)}</small>
@@ -146,7 +146,7 @@ export function AdminShell({ user, children }: { user: AdminUser; children: Reac
           <Link href="/admin/account" className="adminUser" title={locale === 'ar' ? 'حسابي' : 'Account'} aria-label={locale === 'ar' ? 'حسابي' : 'Account'}>
             {user.avatarUrl
               ? <img className="adminUserMark" src={user.avatarUrl} alt="" />
-              : <span className="adminUserMark" aria-hidden="true">{initial}</span>}
+              : <img className="adminUserMark brandLogo" src={BRAND_LOGO} alt="" />}
             <span>
               <b>{user.name}</b>
               <small>{role}</small>
